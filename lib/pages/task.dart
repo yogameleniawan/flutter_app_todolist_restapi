@@ -165,7 +165,7 @@ class _TaskListState extends State<TaskList> {
     final Future<Database> dbFuture = dbHelper.initDb();
     dbFuture.then((database) {
 //TODO 1 Select data dari DB
-      Future<List<Task>> taskListFuture = dbHelper.getTaskList();
+      Future<List<Task>> taskListFuture = dbHelper.getTaskList(idCategory);
       taskListFuture.then((listTask) {
         setState(() {
           this.listTask = listTask;

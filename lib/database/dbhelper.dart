@@ -18,10 +18,17 @@ class DbHelper {
     //untuk mentabase dentukan nama dan lokasi yg dibuat
 
     //create, read databases
-    var itemDatabase = openDatabase(path, version: 1, onCreate: _createDb);
+    var itemDatabase = openDatabase(path,
+        version: 1, onCreate: _createDb, onUpgrade: _onUpgrade);
     //create, read databases
 
     return itemDatabase; //mengembalikan nilai object sebagai hasil dari fungsinya
+  }
+
+  void _onUpgrade(Database db, int oldVersion, int newVersion) {
+    if (oldVersion < newVersion) {
+      // db.execute(""); // SQL Query
+    }
   }
 
 //buat tabel baru dengan nama item
@@ -30,7 +37,7 @@ class DbHelper {
     batch.execute(
         "CREATE TABLE category ( id INTEGER PRIMARY KEY AUTOINCREMENT, categoryName TEXT)");
     batch.execute(
-        "CREATE TABLE task ( id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, idCategory INTEGER)");
+        "CREATE TABLE task ( id INTEGER PRIMARY KEY AUTOINCREMENT, taskName TEXT, idCategory INTEGER)");
     List<dynamic> res = await batch.commit();
   }
 
@@ -77,9 +84,9 @@ class DbHelper {
 
   // Task Table
 //select databases
-  Future<List<Map<String, dynamic>>> selectTask() async {
+  Future<List<Map<String, dynamic>>> selectTask(int idCategory) async {
     Database db = await this.initDb();
-    var mapList = await db.query('task', orderBy: 'id');
+    var mapList = await db.query('task', where: '"idCategory" = $idCategory');
     return mapList;
   }
 
@@ -105,8 +112,8 @@ class DbHelper {
     return count;
   }
 
-  Future<List<Task>> getTaskList() async {
-    var taskMapList = await selectTask();
+  Future<List<Task>> getTaskList(int idCategory) async {
+    var taskMapList = await selectTask(idCategory);
     int count = taskMapList.length;
     List<Task> taskList = List<Task>();
     for (int i = 0; i < count; i++) {
