@@ -30,7 +30,7 @@ class DbHelper {
     batch.execute(
         "CREATE TABLE category ( id INTEGER PRIMARY KEY AUTOINCREMENT, categoryName TEXT)");
     batch.execute(
-        "CREATE TABLE task ( id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT)");
+        "CREATE TABLE task ( id INTEGER PRIMARY KEY AUTOINCREMENT, task TEXT, idCategory INTEGER)");
     List<dynamic> res = await batch.commit();
   }
 
@@ -106,7 +106,7 @@ class DbHelper {
   }
 
   Future<List<Task>> getTaskList() async {
-    var taskMapList = await selectCategory();
+    var taskMapList = await selectTask();
     int count = taskMapList.length;
     List<Task> taskList = List<Task>();
     for (int i = 0; i < count; i++) {

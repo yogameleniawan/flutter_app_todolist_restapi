@@ -1,27 +1,31 @@
 class Task {
   int _id;
-  String _task;
+  String _taskName;
+  int _idCategory;
+  get idCategory => this._idCategory;
+
+  set idCategory(value) => this._idCategory = value;
+
+  String get taskName => this._taskName;
+
+  set taskName(String value) => this._taskName = value;
   int get id => this._id;
 
   set id(int value) => this._id = value;
 
-  String get getTask => this._task;
-
-  set setTask(String task) => this._task = task;
-
-  Task(
-    this._task,
-  );
+  Task(this._taskName, this._idCategory);
 
   Task.fromMap(Map<String, dynamic> map) {
     this._id = map['id'];
-    this._task = map['task'];
+    this._taskName = map['taskName'];
+    this._idCategory = map['idCategory'];
   }
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = Map<String, dynamic>();
     map['id'] = this._id;
-    map['task'] = this._task;
+    map['taskName'] = this._taskName;
+    map['idCategory'] = this._idCategory;
     return map;
   }
 }

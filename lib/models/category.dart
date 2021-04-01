@@ -3,15 +3,13 @@ class Category {
   String _categoryName;
   int get id => this._id;
 
-  set id(int value) => this._id = value;
+  set id(int value) => this.id = value;
 
   String get categoryName => this._categoryName;
 
   set categoryName(String value) => this._categoryName = value;
 
-  Category(
-    this._categoryName,
-  );
+  Category(this._categoryName);
 
   Category.fromMap(Map<String, dynamic> map) {
     this._id = map['id'];
