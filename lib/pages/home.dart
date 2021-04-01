@@ -120,7 +120,7 @@ class HomeState extends State<Home> {
       BuildContext context, Category category) async {
     var result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return EntryForm(category);
+      return FormCategory(category);
     }));
     return result;
   }
@@ -161,6 +161,7 @@ class HomeState extends State<Home> {
               var category =
                   await navigateToTask(context, this.categoryList[index]);
               //TODO 4 Panggil Fungsi untuk Edit data
+              updateListView();
               if (category != null) {
                 int result = await dbHelper.updateCategory(category);
                 if (result > 0) {

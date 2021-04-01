@@ -4,6 +4,8 @@ import 'package:pemrograman_mobile_uts/models/category.dart';
 import 'package:pemrograman_mobile_uts/models/task.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'formTask.dart';
+
 class TaskList extends StatefulWidget {
   final Category category;
   TaskList(this.category);
@@ -114,10 +116,11 @@ class _TaskListState extends State<TaskList> {
     );
   }
 
-  Future<Category> navigateToForm(BuildContext context, Task task) async {
+  Future<Task> navigateToForm(
+      BuildContext context, Task task, int idCategory) async {
     var result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      // return EntryForm(category);
+      return FormTask(idCategory, task);
     }));
     return result;
   }
@@ -143,8 +146,8 @@ class _TaskListState extends State<TaskList> {
             trailing: GestureDetector(
               child: Icon(Icons.edit),
               onTap: () async {
-                var category =
-                    await navigateToForm(context, this.listTask[index]);
+                var task = await navigateToForm(
+                    context, this.listTask[index], idCategory);
                 //TODO 4 Panggil Fungsi untuk Edit data
                 if (task != null) {
                   int result = await dbHelper.updateTask(task);
