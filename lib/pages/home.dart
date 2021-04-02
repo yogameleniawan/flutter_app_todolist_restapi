@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pemrograman_mobile_uts/database/dbhelper.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
 import 'package:pemrograman_mobile_uts/pages/task.dart';
@@ -19,6 +20,7 @@ class HomeState extends State<Home> {
   String emptyText = "";
   TextEditingController categoryName = new TextEditingController();
   Category category;
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -84,6 +86,7 @@ class HomeState extends State<Home> {
       emptyText = "";
     }
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
@@ -110,6 +113,7 @@ class HomeState extends State<Home> {
             backgroundColor: Colors.transparent,
           ),
           body: Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(children: [
               Padding(
                 padding: const EdgeInsets.only(top: 40, bottom: 100),
@@ -123,8 +127,33 @@ class HomeState extends State<Home> {
                           fontSize: 20),
                     ),
                     Text(
-                      "You have " + "tasks to do",
+                      "You have " + count.toString() + " activites to do",
                       style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 15, bottom: 20),
+                child: Row(
+                  children: [
+                    Text(
+                      "Activities",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      " | " +
+                          DateFormat('EEEEEE, MMMM d').format(
+                              selectedDate), // get date format with EEEEEE (Full character of Day -> Sunday, Monday, Tuesday)
+                      // EEE (Just 3 character of day name -> Sun, Mon, Tue)
+                      // MMMM (Full character of Month -> January, February, March)
+                      // MM (Just 3 character of month name -> Jan, Feb, Mar)
+                      // d show the date (1 - 31)
+                      style: TextStyle(color: Colors.black54),
                     ),
                   ],
                 ),
@@ -172,13 +201,25 @@ class HomeState extends State<Home> {
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
+        var iconString;
+        if (index == 1) {
+          iconString = Icon(
+            Icons.edit,
+            color: Colors.white,
+          );
+        } else if (index == 2) {
+          iconString = Icon(
+            Icons.add,
+            color: Colors.white,
+          );
+        }
         return Card(
           color: Colors.white,
           elevation: 2.0,
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Colors.blueGrey,
-              child: Icon(Icons.shopping_cart_rounded),
+              backgroundColor: Colors.green[200],
+              child: iconString,
             ),
             title: Text(
               this.categoryList[index].categoryName,
