@@ -83,27 +83,69 @@ class HomeState extends State<Home> {
     if (categoryList.length > 0) {
       emptyText = "";
     }
-    return Scaffold(
-      appBar: AppBar(title: Text("List Today")),
-      body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Text(emptyText),
-        ),
-        Expanded(
-          child: createListView(),
-        ),
-        Container(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: double.infinity,
-            child: RaisedButton(
-              child: Text("Tambah Item"),
-              onPressed: showBottomSheet,
+    return MaterialApp(
+      home: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                    "lib/images/background.jpg"), //Image Asset Background Image
+                fit: BoxFit.cover)),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Column(
+              children: [
+                Text(
+                  "To Do List",
+                  style: TextStyle(color: Colors.red[200]),
+                ),
+                Text(
+                  "All",
+                  style: TextStyle(color: Colors.black54, fontSize: 12),
+                ),
+              ],
             ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
+          body: Container(
+            child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 40, bottom: 100),
+                child: Column(
+                  children: [
+                    Text(
+                      "My Day",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                    Text(
+                      "You have " + "tasks to do",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: createListView(),
+              ),
+              Container(
+                alignment: Alignment.bottomCenter,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: RaisedButton(
+                    child: Text("Tambah Item"),
+                    onPressed: showBottomSheet,
+                  ),
+                ),
+              ),
+            ]),
           ),
         ),
-      ]),
+      ),
     );
   }
 
