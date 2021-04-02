@@ -5,7 +5,7 @@ import 'package:pemrograman_mobile_uts/models/category.dart';
 import 'package:pemrograman_mobile_uts/pages/task.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async'; //pendukung program asinkron
-
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'formCategory.dart';
 
 class Home extends StatefulWidget {
@@ -116,19 +116,34 @@ class HomeState extends State<Home> {
             padding: EdgeInsets.only(left: 20, right: 20),
             child: Column(children: [
               Padding(
-                padding: const EdgeInsets.only(top: 40, bottom: 100),
-                child: Column(
+                padding: const EdgeInsets.only(top: 40, bottom: 100, left: 50),
+                child: Row(
                   children: [
-                    Text(
-                      "My Day",
-                      style: TextStyle(
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.green[200],
+                        child: Icon(
+                          Icons.list,
                           color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
+                        ),
+                      ),
                     ),
-                    Text(
-                      "You have " + count.toString() + " activites to do",
-                      style: TextStyle(color: Colors.white),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "My Day",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        ),
+                        Text(
+                          "You have " + count.toString() + " activites to do",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -162,11 +177,16 @@ class HomeState extends State<Home> {
                 child: createListView(),
               ),
               Container(
+                padding: EdgeInsets.only(bottom: 10, top: 10),
                 alignment: Alignment.bottomCenter,
                 child: SizedBox(
                   width: double.infinity,
-                  child: RaisedButton(
-                    child: Text("Tambah Item"),
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.red[200],
+                    ),
                     onPressed: showBottomSheet,
                   ),
                 ),
@@ -213,21 +233,30 @@ class HomeState extends State<Home> {
             color: Colors.white,
           );
         }
-        return Card(
-          color: Colors.white,
-          elevation: 2.0,
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.green[200],
-              child: iconString,
+        return Slidable(
+          actionPane: SlidableDrawerActionPane(),
+          actionExtentRatio: 0.25,
+          child: Container(
+            margin: EdgeInsets.only(bottom: 5),
+            color: Colors.white,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.green[200],
+                child: iconString,
+              ),
+              title: Text(
+                this.categoryList[index].categoryName,
+                style: textStyle,
+              ),
+              subtitle: Text("- "),
             ),
-            title: Text(
-              this.categoryList[index].categoryName,
-              style: textStyle,
-            ),
-            subtitle: Text("- "),
-            trailing: GestureDetector(
-              child: Icon(Icons.edit),
+          ),
+          actions: <Widget>[
+            IconSlideAction(
+              caption: 'Edit',
+              color: Colors.green[200],
+              icon: Icons.edit,
+              foregroundColor: Colors.white,
               onTap: () async {
                 var category =
                     await navigateToForm(context, this.categoryList[index]);
@@ -240,19 +269,23 @@ class HomeState extends State<Home> {
                 }
               },
             ),
-            onTap: () async {
-              var category =
-                  await navigateToTask(context, this.categoryList[index]);
-              //TODO 4 Panggil Fungsi untuk Edit data
-              updateListView();
-              if (category != null) {
-                int result = await dbHelper.updateCategory(category);
-                if (result > 0) {
-                  updateListView();
-                }
-              }
-            },
-          ),
+          ],
+          secondaryActions: <Widget>[
+            IconSlideAction(
+              caption: 'Delete',
+              color: Colors.red,
+              icon: Icons.delete,
+              onTap: () async {
+                //TODO 3 Panggil Fungsi untuk Delete dari DB berdasarkan Item
+                int id =
+                    this.categoryList[index].id; // get id from sqlite database
+                int result = await dbHelper
+                    .deleteCategory(id); // delete by id from table
+                categoryList.removeAt(index); // delete by index from list
+                updateListView();
+              },
+            ),
+          ],
         );
       },
     );
