@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pemrograman_mobile_uts/database/dbhelper.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
+import 'package:pemrograman_mobile_uts/models/task.dart';
 import 'package:pemrograman_mobile_uts/pages/task.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:async'; //pendukung program asinkron
@@ -16,10 +17,13 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   DbHelper dbHelper = DbHelper();
   int count = 0;
+  int countTask = 0;
   List<Category> categoryList;
   TextEditingController categoryName = new TextEditingController();
   Category category;
   DateTime selectedDate = DateTime.now();
+  List<Task> listTask;
+  int id;
 
   @override
   void initState() {
@@ -222,6 +226,7 @@ class HomeState extends State<Home> {
       itemBuilder: (BuildContext context, int index) {
         var iconString;
         var textStyle;
+        id = this.categoryList[index].id;
         if (categoryList[index].icon == "Work") {
           iconString = Icon(
             Icons.work,
@@ -256,7 +261,7 @@ class HomeState extends State<Home> {
                 this.categoryList[index].categoryName,
                 style: textStyle,
               ),
-              subtitle: Text("- "),
+              subtitle: Text(categoryList[index].icon),
               onTap: () async {
                 var category =
                     await navigateToTask(context, this.categoryList[index]);
