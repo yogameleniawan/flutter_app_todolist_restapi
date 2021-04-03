@@ -31,10 +31,14 @@ class FormCategoryState extends State<FormCategory> {
 //kondisi
     if (category != null) {
       categoryName.text = category.categoryName;
-      if (status == true) {
-        category.icon = _newValue;
+      if (category.icon == "") {
+        category.icon == "Work";
       } else {
-        _newValue = category.icon;
+        if (status == true) {
+          category.icon = _newValue;
+        } else {
+          _newValue = category.icon;
+        }
       }
     }
 //rubah

@@ -57,7 +57,7 @@ class HomeState extends State<Home> {
                       child: const Text('Add Category'),
                       onPressed: () async {
                         if (category == null) {
-                          category = Category(categoryName.text, "");
+                          category = Category(categoryName.text, "Work");
                         } else {
                           category.categoryName = categoryName.text;
                         }
