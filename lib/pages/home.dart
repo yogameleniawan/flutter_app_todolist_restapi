@@ -17,7 +17,6 @@ class HomeState extends State<Home> {
   DbHelper dbHelper = DbHelper();
   int count = 0;
   List<Category> categoryList;
-  String emptyText = "";
   TextEditingController categoryName = new TextEditingController();
   Category category;
   DateTime selectedDate = DateTime.now();
@@ -81,13 +80,10 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    emptyText = "Empty List";
     if (categoryList == null) {
       categoryList = List<Category>();
     }
-    if (categoryList.length > 0) {
-      emptyText = "";
-    }
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Container(
@@ -220,26 +216,30 @@ class HomeState extends State<Home> {
   }
 
   ListView createListView() {
-    TextStyle textStyle = Theme.of(context).textTheme.headline5;
+    // TextStyle textStyle = Theme.of(context).textTheme.headline5;
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
         var iconString;
+        var textStyle;
         if (categoryList[index].icon == "Work") {
           iconString = Icon(
             Icons.work,
             color: Colors.white,
           );
+          textStyle = TextStyle(color: Colors.red[200], fontSize: 25);
         } else if (categoryList[index].icon == "Shopping") {
           iconString = Icon(
             Icons.shopping_cart,
             color: Colors.white,
           );
+          textStyle = TextStyle(color: Colors.blue[300], fontSize: 25);
         } else if (categoryList[index].icon == "Home") {
           iconString = Icon(
             Icons.home,
             color: Colors.white,
           );
+          textStyle = TextStyle(color: Colors.green[300], fontSize: 25);
         }
         return Slidable(
           actionPane: SlidableDrawerActionPane(),

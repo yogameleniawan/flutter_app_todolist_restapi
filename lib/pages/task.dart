@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pemrograman_mobile_uts/database/dbhelper.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
 import 'package:pemrograman_mobile_uts/models/task.dart';
@@ -20,11 +21,11 @@ class _TaskListState extends State<TaskList> {
   DbHelper dbHelper = DbHelper();
   int count = 0;
   List<Task> listTask;
-  String emptyText = "";
   TextEditingController taskName = new TextEditingController();
   int idCategory;
   Category category;
   Task task;
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -85,34 +86,122 @@ class _TaskListState extends State<TaskList> {
     if (category != null) {
       idCategory = category.id;
     }
-    emptyText = "Empty List";
+
     if (listTask == null) {
       listTask = List<Task>();
     }
-    if (listTask.length > 0) {
-      emptyText = "";
-    }
+
     return Scaffold(
-      appBar: AppBar(title: Text(category.categoryName)),
-      body: Column(children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Text(emptyText),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black54),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        Expanded(
-          child: createListView(),
+        title: Row(
+          children: [
+            Text(
+              "|  ",
+              style: TextStyle(color: Colors.black54, fontSize: 25),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  category.categoryName,
+                  style: TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20),
+                ),
+                Text(
+                  "All",
+                  style: TextStyle(color: Colors.black54, fontSize: 12),
+                ),
+              ],
+            ),
+          ],
         ),
-        Container(
-          alignment: Alignment.bottomCenter,
-          child: SizedBox(
-            width: double.infinity,
-            child: RaisedButton(
-              child: Text("Tambah Item"),
-              onPressed: showBottomSheet,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.add_box,
+              color: Colors.green[200],
+            ),
+            onPressed:
+                showBottomSheet, // Call function addItemToList to Add item to list
+          ),
+        ],
+      ),
+      body: Container(
+        padding: EdgeInsets.only(left: 20, right: 20),
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 40, bottom: 50, left: 10),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.green[200],
+                    child: Icon(
+                      Icons.list,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Task List",
+                      style: TextStyle(
+                          color: Colors.black54,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 25),
+                    ),
+                    Text(
+                      "You have " + count.toString() + " task to do",
+                      style: TextStyle(color: Colors.black54),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        ),
-      ]),
+          Container(
+            alignment: Alignment.topLeft,
+            padding: EdgeInsets.only(bottom: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Task",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  DateFormat('EEEEEE, MMMM d').format(
+                      selectedDate), // get date format with EEEEEE (Full character of Day -> Sunday, Monday, Tuesday)
+                  // EEE (Just 3 character of day name -> Sun, Mon, Tue)
+                  // MMMM (Full character of Month -> January, February, March)
+                  // MM (Just 3 character of month name -> Jan, Feb, Mar)
+                  // d show the date (1 - 31)
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: createListView(),
+          ),
+        ]),
+      ),
     );
   }
 
