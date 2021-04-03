@@ -17,10 +17,12 @@ class FormCategoryState extends State<FormCategory> {
   TextEditingController categoryName = TextEditingController();
   var listIcon = ["Work", "Shopping", "Home"];
   String _newValue = "Work";
+  bool status = false;
 
   void dropdownOnChanged(String changeValue) {
     setState(() {
       _newValue = changeValue;
+      status = true;
     });
   }
 
@@ -29,7 +31,11 @@ class FormCategoryState extends State<FormCategory> {
 //kondisi
     if (category != null) {
       categoryName.text = category.categoryName;
-      // _newValue = category.icon;
+      if (status == true) {
+        category.icon = _newValue;
+      } else {
+        _newValue = category.icon;
+      }
     }
 //rubah
     return Scaffold(
