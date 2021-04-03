@@ -133,11 +133,11 @@ class HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "My Day",
+                          "Activities List",
                           style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontSize: 18),
                         ),
                         Text(
                           "You have " + count.toString() + " activites to do",
@@ -236,7 +236,7 @@ class HomeState extends State<Home> {
         return Slidable(
           actionPane: SlidableDrawerActionPane(),
           actionExtentRatio: 0.25,
-          child: Container(
+          child: Card(
             margin: EdgeInsets.only(bottom: 5),
             color: Colors.white,
             child: ListTile(
@@ -249,6 +249,18 @@ class HomeState extends State<Home> {
                 style: textStyle,
               ),
               subtitle: Text("- "),
+              onTap: () async {
+                var category =
+                    await navigateToTask(context, this.categoryList[index]);
+                //TODO 4 Panggil Fungsi untuk Edit data
+                updateListView();
+                if (category != null) {
+                  int result = await dbHelper.updateCategory(category);
+                  if (result > 0) {
+                    updateListView();
+                  }
+                }
+              },
             ),
           ),
           actions: <Widget>[

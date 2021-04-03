@@ -37,7 +37,7 @@ class DbHelper {
     batch.execute(
         "CREATE TABLE category ( id INTEGER PRIMARY KEY AUTOINCREMENT, categoryName TEXT)");
     batch.execute(
-        "CREATE TABLE task ( id INTEGER PRIMARY KEY AUTOINCREMENT, taskName TEXT, idCategory INTEGER FOREIGN KEY (idCategory) REFERENCES category(id) ON UPDATE CASCADE ON DELETE CASCADE)");
+        "CREATE TABLE task ( id INTEGER PRIMARY KEY AUTOINCREMENT, taskName TEXT, idCategory INTEGER)");
     List<dynamic> res = await batch.commit();
   }
 
