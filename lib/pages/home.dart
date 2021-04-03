@@ -35,7 +35,7 @@ class HomeState extends State<Home> {
       builder: (BuildContext context) {
         return SingleChildScrollView(
           child: Container(
-            height: 300,
+            height: 200,
             margin: EdgeInsets.only(left: 10, right: 10),
             // color: Colors.amber,
             child: Center(
@@ -51,21 +51,24 @@ class HomeState extends State<Home> {
                       hintText: "Insert category name",
                     ),
                   ),
-                  ElevatedButton(
-                    child: const Text('Add Item'),
-                    onPressed: () async {
-                      if (category == null) {
-                        category = Category(categoryName.text);
-                      } else {
-                        category.categoryName = categoryName.text;
-                      }
-                      int result = await dbHelper.insertCategory(category);
-                      if (result > 0) {
-                        updateListView();
-                      }
-                      Navigator.pop(context, category);
-                      categoryName.clear();
-                    },
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: ElevatedButton(
+                      child: const Text('Add Category'),
+                      onPressed: () async {
+                        if (category == null) {
+                          category = Category(categoryName.text, "");
+                        } else {
+                          category.categoryName = categoryName.text;
+                        }
+                        int result = await dbHelper.insertCategory(category);
+                        if (result > 0) {
+                          updateListView();
+                        }
+                        Navigator.pop(context, category);
+                        categoryName.clear();
+                      },
+                    ),
                   )
                 ],
               ),
@@ -222,14 +225,19 @@ class HomeState extends State<Home> {
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
         var iconString;
-        if (index == 1) {
+        if (categoryList[index].icon == "Work") {
           iconString = Icon(
-            Icons.edit,
+            Icons.work,
             color: Colors.white,
           );
-        } else if (index == 2) {
+        } else if (categoryList[index].icon == "Shopping") {
           iconString = Icon(
-            Icons.add,
+            Icons.shopping_cart,
+            color: Colors.white,
+          );
+        } else if (categoryList[index].icon == "Home") {
+          iconString = Icon(
+            Icons.home,
             color: Colors.white,
           );
         }

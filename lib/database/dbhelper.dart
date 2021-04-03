@@ -35,7 +35,7 @@ class DbHelper {
   void _createDb(Database db, int version) async {
     Batch batch = db.batch();
     batch.execute(
-        "CREATE TABLE category ( id INTEGER PRIMARY KEY AUTOINCREMENT, categoryName TEXT)");
+        "CREATE TABLE category ( id INTEGER PRIMARY KEY AUTOINCREMENT, categoryName TEXT, icon TEXT)");
     batch.execute(
         "CREATE TABLE task ( id INTEGER PRIMARY KEY AUTOINCREMENT, taskName TEXT, idCategory INTEGER)");
     List<dynamic> res = await batch.commit();

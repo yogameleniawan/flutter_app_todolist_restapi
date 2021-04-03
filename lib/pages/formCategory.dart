@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pemrograman_mobile_uts/database/dbhelper.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
 
 class FormCategory extends StatefulWidget {
@@ -10,15 +11,25 @@ class FormCategory extends StatefulWidget {
 
 //class controller
 class FormCategoryState extends State<FormCategory> {
+  DbHelper dbHelper = DbHelper();
   Category category;
   FormCategoryState(this.category);
   TextEditingController categoryName = TextEditingController();
+  var listIcon = ["Work", "Shopping", "Home"];
+  String _newValue = "Work";
+
+  void dropdownOnChanged(String changeValue) {
+    setState(() {
+      _newValue = changeValue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
 //kondisi
     if (category != null) {
       categoryName.text = category.categoryName;
+      // _newValue = category.icon;
     }
 //rubah
     return Scaffold(
@@ -46,6 +57,16 @@ class FormCategoryState extends State<FormCategory> {
                   },
                 ),
               ),
+              DropdownButton<String>(
+                items: listIcon.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                value: _newValue,
+                onChanged: dropdownOnChanged,
+              ),
 
 // tombol button
               Padding(
@@ -64,12 +85,11 @@ class FormCategoryState extends State<FormCategory> {
                         onPressed: () {
                           if (category == null) {
 // tambah data
-                            category = Category(
-                              categoryName.text,
-                            );
+                            category = Category(categoryName.text, _newValue);
                           } else {
 // ubah data
                             category.categoryName = categoryName.text;
+                            category.icon = _newValue;
                           }
 // kembali ke layar sebelumnya dengan membawa objek item
                           Navigator.pop(context, category);
