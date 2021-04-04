@@ -219,13 +219,42 @@ class _TaskListState extends State<TaskList> {
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
+        var iconColor;
+        var iconString;
+        var textStyle;
+        if (category.icon == "No Category") {
+          textStyle = TextStyle(color: Colors.black54, fontSize: 25);
+          iconColor = Colors.black54;
+        } else if (category.icon == "Work") {
+          iconColor = Colors.red[200];
+          iconString = Icon(
+            Icons.work,
+            color: Colors.white,
+          );
+          textStyle = TextStyle(color: Colors.red[200], fontSize: 25);
+        } else if (category.icon == "Shopping") {
+          iconColor = Colors.blue[300];
+          iconString = Icon(
+            Icons.shopping_cart,
+            color: Colors.white,
+          );
+          textStyle = TextStyle(color: Colors.blue[300], fontSize: 25);
+        } else if (category.icon == "Home") {
+          iconColor = Colors.green[300];
+          iconString = Icon(
+            Icons.home,
+            color: Colors.white,
+          );
+          textStyle = TextStyle(color: Colors.green[300], fontSize: 25);
+        }
+
         return Card(
           color: Colors.white,
           elevation: 2.0,
           child: ListTile(
             leading: CircleAvatar(
-              backgroundColor: Colors.blueGrey,
-              child: Icon(Icons.shopping_cart_rounded),
+              backgroundColor: iconColor,
+              child: iconString,
             ),
             title: Text(
               this.listTask[index].taskName,
