@@ -219,6 +219,7 @@ class _TaskListState extends State<TaskList> {
     return ListView.builder(
       itemCount: count,
       itemBuilder: (BuildContext context, int index) {
+        int idTask = this.listTask[index].id;
         var iconColor;
         var iconString;
         var textStyle;
@@ -248,32 +249,37 @@ class _TaskListState extends State<TaskList> {
           textStyle = TextStyle(color: Colors.green[300], fontSize: 25);
         }
 
-        return Card(
-          color: Colors.white,
-          elevation: 2.0,
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundColor: iconColor,
-              child: iconString,
-            ),
-            title: Text(
-              this.listTask[index].taskName,
-              style: textStyle,
-            ),
-            subtitle: Text("- "),
-            trailing: GestureDetector(
-              child: Icon(Icons.edit),
-              onTap: () async {
-                var task = await navigateToForm(
-                    context, this.listTask[index], idCategory);
-                //TODO 4 Panggil Fungsi untuk Edit data
-                if (task != null) {
-                  int result = await dbHelper.updateTask(task);
-                  if (result > 0) {
-                    updateListView();
+        return InkWell(
+          onLongPress: () {
+            _showcontent(index, idTask);
+          },
+          child: Card(
+            color: Colors.white,
+            elevation: 2.0,
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: iconColor,
+                child: iconString,
+              ),
+              title: Text(
+                this.listTask[index].taskName,
+                style: textStyle,
+              ),
+              subtitle: Text("- "),
+              trailing: GestureDetector(
+                child: Icon(Icons.edit),
+                onTap: () async {
+                  var task = await navigateToForm(
+                      context, this.listTask[index], idCategory);
+                  //TODO 4 Panggil Fungsi untuk Edit data
+                  if (task != null) {
+                    int result = await dbHelper.updateTask(task);
+                    if (result > 0) {
+                      updateListView();
+                    }
                   }
-                }
-              },
+                },
+              ),
             ),
           ),
         );
@@ -294,5 +300,42 @@ class _TaskListState extends State<TaskList> {
         });
       });
     });
+  }
+
+  void _showcontent(int index, int idTask) {
+    showDialog(
+      context: context, barrierDismissible: false, // user must tap button!
+
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Remove Item'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: [
+                new Text('Are you sure to remove task?'),
+              ],
+            ),
+          ),
+          actions: [
+            new FlatButton(
+              child: new Text('YES'),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                int result = await dbHelper
+                    .deleteTask(idTask); // delete by id from table
+                listTask.removeAt(index); // delete by index from list
+                updateListView();
+              },
+            ),
+            new FlatButton(
+              child: new Text('NO'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
