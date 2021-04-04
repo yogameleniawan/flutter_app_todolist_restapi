@@ -60,7 +60,7 @@ class HomeState extends State<Home> {
                       child: const Text('Add Category'),
                       onPressed: () async {
                         if (category == null) {
-                          category = Category(categoryName.text, "Work");
+                          category = Category(categoryName.text, "No Category");
                         } else {
                           category.categoryName = categoryName.text;
                         }
@@ -227,7 +227,9 @@ class HomeState extends State<Home> {
         var iconString;
         var textStyle;
         id = this.categoryList[index].id;
-        if (categoryList[index].icon == "Work") {
+        if (categoryList[index].icon == "No Category") {
+          textStyle = TextStyle(color: Colors.black54, fontSize: 25);
+        } else if (categoryList[index].icon == "Work") {
           iconString = Icon(
             Icons.work,
             color: Colors.white,

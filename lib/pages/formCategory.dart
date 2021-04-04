@@ -15,8 +15,8 @@ class FormCategoryState extends State<FormCategory> {
   Category category;
   FormCategoryState(this.category);
   TextEditingController categoryName = TextEditingController();
-  var listIcon = ["Work", "Shopping", "Home"];
-  String _newValue = "Work";
+  var listIcon = ["No Category", "Work", "Shopping", "Home"];
+  String _newValue = "No Category";
   bool status = false;
 
   void dropdownOnChanged(String changeValue) {
@@ -32,7 +32,7 @@ class FormCategoryState extends State<FormCategory> {
     if (category != null) {
       categoryName.text = category.categoryName;
       if (category.icon == "") {
-        category.icon == "Work";
+        category.icon == "No Category";
       } else {
         if (status == true) {
           category.icon = _newValue;
@@ -67,15 +67,17 @@ class FormCategoryState extends State<FormCategory> {
                   },
                 ),
               ),
-              DropdownButton<String>(
-                items: listIcon.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                value: _newValue,
-                onChanged: dropdownOnChanged,
+              Center(
+                child: DropdownButton<String>(
+                  items: listIcon.map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  value: _newValue,
+                  onChanged: dropdownOnChanged,
+                ),
               ),
 
 // tombol button
