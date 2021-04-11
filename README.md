@@ -2,6 +2,33 @@
 
 A new Flutter project.
 
+# Home List
+![plot](./images/1.png)
+
+## Add List
+![plot](./images/2.png)
+
+## Edit List
+![plot](./images/3.png)
+![plot](./images/9.png)
+
+## Delete List
+![plot](./images/4.png)
+
+# Task List
+![plot](./images/5.png)
+
+## Add Task
+![plot](./images/6.png)
+
+## Edit Task
+![plot](./images/7.png)
+
+## Delete Task
+![plot](./images/8.png)
+
+
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
