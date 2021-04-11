@@ -57,6 +57,8 @@ class HomeState extends State<Home> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20),
                     child: ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.green[300]),
                       child: const Text('Add Category'),
                       onPressed: () async {
                         if (category == null) {

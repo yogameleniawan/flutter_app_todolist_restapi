@@ -40,7 +40,7 @@ class _TaskListState extends State<TaskList> {
       builder: (BuildContext context) {
         return SingleChildScrollView(
           child: Container(
-            height: 300,
+            height: 200,
             margin: EdgeInsets.only(left: 10, right: 10),
             // color: Colors.amber,
             child: Center(
@@ -58,6 +58,7 @@ class _TaskListState extends State<TaskList> {
                   ),
                   ElevatedButton(
                     child: const Text('Add Task'),
+                    style: ElevatedButton.styleFrom(primary: Colors.green[300]),
                     onPressed: () async {
                       if (task == null) {
                         task = Task(taskName.text, idCategory);
@@ -265,7 +266,7 @@ class _TaskListState extends State<TaskList> {
                 this.listTask[index].taskName,
                 style: textStyle,
               ),
-              subtitle: Text("- "),
+              subtitle: Text("Task"),
               trailing: GestureDetector(
                 child: Icon(Icons.edit),
                 onTap: () async {
