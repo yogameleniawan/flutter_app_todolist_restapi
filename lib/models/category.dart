@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Category {
   String _id;
   String _categoryName;
@@ -16,6 +18,10 @@ class Category {
   set icon(value) => this._icon = value;
 
   Category(this._categoryName, this._icon);
+
+  Map<String, dynamic> toJson() {
+    return {"name": categoryName, "icon": icon};
+  }
 
   Category.fromJson(Map<String, dynamic> parsedJson) {
     this._id = parsedJson['id'];

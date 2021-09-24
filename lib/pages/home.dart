@@ -70,10 +70,18 @@ class HomeState extends State<Home> {
                           ElevatedButton.styleFrom(primary: Colors.green[300]),
                       child: const Text('Add Category'),
                       onPressed: () async {
-                        if (category == null) {
-                          category = Category(categoryName.text, "No Category");
+                        bool status = await service.createCategory(
+                            categoryName.text, "No Category");
+                        if (status == true) {
+                          print("sukses");
+                          initialize();
                         } else {
-                          // category.categoryName = categoryName.text;
+                          print("gagal");
+                        }
+                        if (category == null) {
+                          // category = Category(categoryName.text, "No Category");
+                        } else {
+                          category.categoryName = categoryName.text;
                         }
                         // int result = await dbHelper.insertCategory(category);
                         // if (result > 0) {
@@ -236,7 +244,7 @@ class HomeState extends State<Home> {
         var iconColor;
         var iconString;
         var textStyle;
-        // id = this.categoryList[index].id;
+        id = this.categoryList[index].id;
         if (categoryList[index].icon == "No Category") {
           textStyle = TextStyle(color: Colors.black54, fontSize: 25);
           iconColor = Colors.black54;
@@ -328,20 +336,5 @@ class HomeState extends State<Home> {
         );
       },
     );
-  }
-
-//update List item
-  void updateListView() {
-//     final Future<Database> dbFuture = dbHelper.initDb();
-//     dbFuture.then((database) {
-// //TODO 1 Select data dari DB
-//       Future<List<Category>> categoryListFuture = dbHelper.getCategoryList();
-//       categoryListFuture.then((categoryList) {
-//         setState(() {
-//           this.categoryList = categoryList;
-//           this.countCategory = categoryList.length;
-//         });
-//       });
-//     });
   }
 }
