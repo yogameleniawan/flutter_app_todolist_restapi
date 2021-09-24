@@ -4,7 +4,7 @@ import 'package:pemrograman_mobile_uts/models/task.dart';
 
 class FormTask extends StatefulWidget {
   final Task task;
-  final int idCategory;
+  final String idCategory;
   FormTask(this.idCategory, this.task);
 
   @override
@@ -13,7 +13,7 @@ class FormTask extends StatefulWidget {
 
 class _FormTaskState extends State<FormTask> {
   Task task;
-  int idCategory;
+  String idCategory;
   _FormTaskState(this.idCategory, this.task);
   TextEditingController taskName = TextEditingController();
 

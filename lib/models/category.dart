@@ -1,32 +1,25 @@
 class Category {
-  int _id;
+  String _id;
   String _categoryName;
   String _icon;
-  int get id => this._id;
 
-  set id(int value) => this.id = value;
+  get categoryName => this._categoryName;
 
-  String get categoryName => this._categoryName;
+  set categoryName(value) => this._categoryName = value;
 
-  set categoryName(String value) => this._categoryName = value;
+  String get id => this._id;
 
-  String get icon => this._icon;
+  set id(String value) => this._id = value;
 
-  set icon(String value) => this._icon = value;
+  get icon => this._icon;
+
+  set icon(value) => this._icon = value;
 
   Category(this._categoryName, this._icon);
 
-  Category.fromMap(Map<String, dynamic> map) {
-    this._id = map['id'];
-    this._categoryName = map['categoryName'];
-    this._icon = map['icon'];
-  }
-
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = Map<String, dynamic>();
-    map['id'] = this._id;
-    map['categoryName'] = this._categoryName;
-    map['icon'] = this._icon;
-    return map;
+  Category.fromJson(Map<String, dynamic> parsedJson) {
+    this._id = parsedJson['id'];
+    this._categoryName = parsedJson['name'];
+    this._icon = parsedJson['icon'];
   }
 }

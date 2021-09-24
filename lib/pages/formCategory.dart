@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pemrograman_mobile_uts/database/dbhelper.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
 
 class FormCategory extends StatefulWidget {
@@ -11,7 +10,6 @@ class FormCategory extends StatefulWidget {
 
 //class controller
 class FormCategoryState extends State<FormCategory> {
-  DbHelper dbHelper = DbHelper();
   Category category;
   FormCategoryState(this.category);
   TextEditingController categoryName = TextEditingController();
@@ -29,18 +27,18 @@ class FormCategoryState extends State<FormCategory> {
   @override
   Widget build(BuildContext context) {
 //kondisi
-    if (category != null) {
-      categoryName.text = category.categoryName;
-      if (category.icon == "") {
-        category.icon == "No Category";
-      } else {
-        if (status == true) {
-          category.icon = _newValue;
-        } else {
-          _newValue = category.icon;
-        }
-      }
-    }
+    // if (category != null) {
+    //   categoryName.text = category.categoryName;
+    //   if (category.icon == "") {
+    //     category.icon == "No Category";
+    //   } else {
+    //     if (status == true) {
+    //       category.icon = _newValue;
+    //     } else {
+    //       _newValue = category.icon;
+    //     }
+    //   }
+    // }
 //rubah
     return Scaffold(
         appBar: AppBar(
@@ -100,8 +98,8 @@ class FormCategoryState extends State<FormCategory> {
                             category = Category(categoryName.text, _newValue);
                           } else {
 // ubah data
-                            category.categoryName = categoryName.text;
-                            category.icon = _newValue;
+                            // category.categoryName = categoryName.text;
+                            // category.icon = _newValue;
                           }
 // kembali ke layar sebelumnya dengan membawa objek item
                           Navigator.pop(context, category);

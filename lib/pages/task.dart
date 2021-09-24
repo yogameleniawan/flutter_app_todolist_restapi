@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pemrograman_mobile_uts/database/dbhelper.dart';
+import 'package:pemrograman_mobile_uts/database/httpservice.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
 import 'package:pemrograman_mobile_uts/models/task.dart';
 import 'package:sqflite/sqflite.dart';
@@ -18,19 +18,29 @@ class TaskList extends StatefulWidget {
 class _TaskListState extends State<TaskList> {
   _TaskListState(this.category);
 
-  DbHelper dbHelper = DbHelper();
-  int count = 0;
-  List<Task> listTask;
+  HTTPService service;
+
+  List listTask;
+  int listCount = 0;
   TextEditingController taskName = new TextEditingController();
-  int idCategory;
   Category category;
   Task task;
   DateTime selectedDate = DateTime.now();
 
+  Future initialize() async {
+    listTask = [];
+    listTask = await service.getTask(category_id: category.id);
+    setState(() {
+      listCount = listTask.length;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    updateListView();
+    service = new HTTPService();
+    initialize();
+    // updateListView();
   }
 
   void showBottomSheet() {
@@ -61,14 +71,14 @@ class _TaskListState extends State<TaskList> {
                     style: ElevatedButton.styleFrom(primary: Colors.green[300]),
                     onPressed: () async {
                       if (task == null) {
-                        task = Task(taskName.text, idCategory);
+                        task = Task(taskName.text, category.id);
                       } else {
                         task.taskName = taskName.text;
                       }
-                      int result = await dbHelper.insertTask(task);
-                      if (result > 0) {
-                        updateListView();
-                      }
+                      // int result = await dbHelper.insertTask(task);
+                      // if (result > 0) {
+                      //   updateListView();
+                      // }
                       Navigator.pop(context, task);
                       taskName.clear();
                     },
@@ -84,10 +94,6 @@ class _TaskListState extends State<TaskList> {
 
   @override
   Widget build(BuildContext context) {
-    if (category != null) {
-      idCategory = category.id;
-    }
-
     if (listTask == null) {
       listTask = List<Task>();
     }
@@ -164,7 +170,7 @@ class _TaskListState extends State<TaskList> {
                           fontSize: 25),
                     ),
                     Text(
-                      "You have " + count.toString() + " task to do",
+                      "You have " + listCount.toString() + " task to do",
                       style: TextStyle(color: Colors.black54),
                     ),
                   ],
@@ -207,7 +213,7 @@ class _TaskListState extends State<TaskList> {
   }
 
   Future<Task> navigateToForm(
-      BuildContext context, Task task, int idCategory) async {
+      BuildContext context, Task task, String idCategory) async {
     var result = await Navigator.push(context,
         MaterialPageRoute(builder: (BuildContext context) {
       return FormTask(idCategory, task);
@@ -218,9 +224,9 @@ class _TaskListState extends State<TaskList> {
   ListView createListView() {
     TextStyle textStyle = Theme.of(context).textTheme.headline5;
     return ListView.builder(
-      itemCount: count,
+      itemCount: listCount,
       itemBuilder: (BuildContext context, int index) {
-        int idTask = this.listTask[index].id;
+        String idTask = this.listTask[index].id;
         var iconColor;
         var iconString;
         var textStyle;
@@ -271,13 +277,13 @@ class _TaskListState extends State<TaskList> {
                 child: Icon(Icons.edit),
                 onTap: () async {
                   var task = await navigateToForm(
-                      context, this.listTask[index], idCategory);
+                      context, this.listTask[index], category.id);
                   //TODO 4 Panggil Fungsi untuk Edit data
                   if (task != null) {
-                    int result = await dbHelper.updateTask(task);
-                    if (result > 0) {
-                      updateListView();
-                    }
+                    // int result = await dbHelper.updateTask(task);
+                    // if (result > 0) {
+                    //   updateListView();
+                    // }
                   }
                 },
               ),
@@ -290,20 +296,20 @@ class _TaskListState extends State<TaskList> {
 
 //update List item
   void updateListView() {
-    final Future<Database> dbFuture = dbHelper.initDb();
-    dbFuture.then((database) {
-//TODO 1 Select data dari DB
-      Future<List<Task>> taskListFuture = dbHelper.getTaskList(idCategory);
-      taskListFuture.then((listTask) {
-        setState(() {
-          this.listTask = listTask;
-          this.count = listTask.length;
-        });
-      });
-    });
+//     final Future<Database> dbFuture = dbHelper.initDb();
+//     dbFuture.then((database) {
+// //TODO 1 Select data dari DB
+//       Future<List<Task>> taskListFuture = dbHelper.getTaskList(idCategory);
+//       taskListFuture.then((listTask) {
+//         setState(() {
+//           this.listTask = listTask;
+//           this.count = listTask.length;
+//         });
+//       });
+//     });
   }
 
-  void _showcontent(int index, int idTask) {
+  void _showcontent(int index, String idTask) {
     showDialog(
       context: context, barrierDismissible: false, // user must tap button!
 
@@ -322,10 +328,10 @@ class _TaskListState extends State<TaskList> {
               child: new Text('YES'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                int result = await dbHelper
-                    .deleteTask(idTask); // delete by id from table
-                listTask.removeAt(index); // delete by index from list
-                updateListView();
+                // int result = await dbHelper
+                //     .deleteTask(idTask); // delete by id from table
+                // listTask.removeAt(index); // delete by index from list
+                // updateListView();
               },
             ),
             new FlatButton(

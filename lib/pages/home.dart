@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pemrograman_mobile_uts/database/dbhelper.dart';
+import 'package:pemrograman_mobile_uts/database/httpservice.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
 import 'package:pemrograman_mobile_uts/models/task.dart';
 import 'package:pemrograman_mobile_uts/pages/task.dart';
@@ -15,20 +15,29 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
-  DbHelper dbHelper = DbHelper();
-  int count = 0;
+  HTTPService service;
+  int countCategory = 0;
   int countTask = 0;
-  List<Category> categoryList;
+  List categoryList;
   TextEditingController categoryName = new TextEditingController();
   Category category;
   DateTime selectedDate = DateTime.now();
-  List<Task> listTask;
-  int id;
+  List listTask;
+  String id;
+
+  Future initialize() async {
+    categoryList = [];
+    categoryList = await service.getCategory();
+    setState(() {
+      countCategory = categoryList.length;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    updateListView();
+    service = new HTTPService();
+    initialize();
   }
 
   void showBottomSheet() {
@@ -64,12 +73,12 @@ class HomeState extends State<Home> {
                         if (category == null) {
                           category = Category(categoryName.text, "No Category");
                         } else {
-                          category.categoryName = categoryName.text;
+                          // category.categoryName = categoryName.text;
                         }
-                        int result = await dbHelper.insertCategory(category);
-                        if (result > 0) {
-                          updateListView();
-                        }
+                        // int result = await dbHelper.insertCategory(category);
+                        // if (result > 0) {
+                        //   updateListView();
+                        // }
                         Navigator.pop(context, category);
                         categoryName.clear();
                       },
@@ -86,10 +95,6 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    if (categoryList == null) {
-      categoryList = List<Category>();
-    }
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Container(
@@ -145,7 +150,9 @@ class HomeState extends State<Home> {
                               fontSize: 18),
                         ),
                         Text(
-                          "You have " + count.toString() + " activites to do",
+                          "You have " +
+                              countCategory.toString() +
+                              " activites to do",
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -224,12 +231,12 @@ class HomeState extends State<Home> {
   ListView createListView() {
     // TextStyle textStyle = Theme.of(context).textTheme.headline5;
     return ListView.builder(
-      itemCount: count,
+      itemCount: countCategory,
       itemBuilder: (BuildContext context, int index) {
         var iconColor;
         var iconString;
         var textStyle;
-        id = this.categoryList[index].id;
+        // id = this.categoryList[index].id;
         if (categoryList[index].icon == "No Category") {
           textStyle = TextStyle(color: Colors.black54, fontSize: 25);
           iconColor = Colors.black54;
@@ -274,13 +281,12 @@ class HomeState extends State<Home> {
               onTap: () async {
                 var category =
                     await navigateToTask(context, this.categoryList[index]);
-                //TODO 4 Panggil Fungsi untuk Edit data
-                updateListView();
+                // updateListView();
                 if (category != null) {
-                  int result = await dbHelper.updateCategory(category);
-                  if (result > 0) {
-                    updateListView();
-                  }
+                  // int result = await dbHelper.updateCategory(category);
+                  // if (result > 0) {
+                  //   // updateListView();
+                  // }
                 }
               },
             ),
@@ -296,10 +302,10 @@ class HomeState extends State<Home> {
                     await navigateToForm(context, this.categoryList[index]);
                 //TODO 4 Panggil Fungsi untuk Edit data
                 if (category != null) {
-                  int result = await dbHelper.updateCategory(category);
-                  if (result > 0) {
-                    updateListView();
-                  }
+                  // int result = await dbHelper.updateCategory(category);
+                  // if (result > 0) {
+                  //   // updateListView();
+                  // }
                 }
               },
             ),
@@ -310,13 +316,12 @@ class HomeState extends State<Home> {
               color: Colors.red,
               icon: Icons.delete,
               onTap: () async {
-                //TODO 3 Panggil Fungsi untuk Delete dari DB berdasarkan Item
-                int id =
-                    this.categoryList[index].id; // get id from sqlite database
-                int result = await dbHelper
-                    .deleteCategory(id); // delete by id from table
-                categoryList.removeAt(index); // delete by index from list
-                updateListView();
+                // String id =
+                //     this.categoryList[index].id; // get id from sqlite database
+                // String result = await dbHelper
+                //     .deleteCategory(id); // delete by id from table
+                // categoryList.removeAt(index); // delete by index from list
+                // updateListView();
               },
             ),
           ],
@@ -327,16 +332,16 @@ class HomeState extends State<Home> {
 
 //update List item
   void updateListView() {
-    final Future<Database> dbFuture = dbHelper.initDb();
-    dbFuture.then((database) {
-//TODO 1 Select data dari DB
-      Future<List<Category>> categoryListFuture = dbHelper.getCategoryList();
-      categoryListFuture.then((categoryList) {
-        setState(() {
-          this.categoryList = categoryList;
-          this.count = categoryList.length;
-        });
-      });
-    });
+//     final Future<Database> dbFuture = dbHelper.initDb();
+//     dbFuture.then((database) {
+// //TODO 1 Select data dari DB
+//       Future<List<Category>> categoryListFuture = dbHelper.getCategoryList();
+//       categoryListFuture.then((categoryList) {
+//         setState(() {
+//           this.categoryList = categoryList;
+//           this.countCategory = categoryList.length;
+//         });
+//       });
+//     });
   }
 }
