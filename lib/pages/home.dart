@@ -17,13 +17,11 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   HTTPService service;
   int countCategory = 0;
-  int countTask = 0;
   List categoryList;
   TextEditingController categoryName = new TextEditingController();
   Category category;
   DateTime selectedDate = DateTime.now();
   List listTask;
-  String id;
 
   Future initialize() async {
     categoryList = [];
@@ -78,15 +76,6 @@ class HomeState extends State<Home> {
                         } else {
                           print("gagal");
                         }
-                        if (category == null) {
-                          // category = Category(categoryName.text, "No Category");
-                        } else {
-                          category.categoryName = categoryName.text;
-                        }
-                        // int result = await dbHelper.insertCategory(category);
-                        // if (result > 0) {
-                        //   updateListView();
-                        // }
                         Navigator.pop(context, category);
                         categoryName.clear();
                       },
@@ -108,8 +97,7 @@ class HomeState extends State<Home> {
       home: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(
-                    "lib/images/background.jpg"), //Image Asset Background Image
+                image: AssetImage("lib/images/background.jpg"),
                 fit: BoxFit.cover)),
         child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -181,13 +169,7 @@ class HomeState extends State<Home> {
                       ),
                     ),
                     Text(
-                      " | " +
-                          DateFormat('EEEEEE, MMMM d').format(
-                              selectedDate), // get date format with EEEEEE (Full character of Day -> Sunday, Monday, Tuesday)
-                      // EEE (Just 3 character of day name -> Sun, Mon, Tue)
-                      // MMMM (Full character of Month -> January, February, March)
-                      // MM (Just 3 character of month name -> Jan, Feb, Mar)
-                      // d show the date (1 - 31)
+                      " | " + DateFormat('EEEEEE, MMMM d').format(selectedDate),
                       style: TextStyle(color: Colors.black54),
                     ),
                   ],
@@ -244,7 +226,6 @@ class HomeState extends State<Home> {
         var iconColor;
         var iconString;
         var textStyle;
-        id = this.categoryList[index].id;
         if (categoryList[index].icon == "No Category") {
           textStyle = TextStyle(color: Colors.black54, fontSize: 25);
           iconColor = Colors.black54;
@@ -308,13 +289,7 @@ class HomeState extends State<Home> {
               onTap: () async {
                 var category =
                     await navigateToForm(context, this.categoryList[index]);
-                //TODO 4 Panggil Fungsi untuk Edit data
-                if (category != null) {
-                  // int result = await dbHelper.updateCategory(category);
-                  // if (result > 0) {
-                  //   // updateListView();
-                  // }
-                }
+                initialize();
               },
             ),
           ],
@@ -324,12 +299,14 @@ class HomeState extends State<Home> {
               color: Colors.red,
               icon: Icons.delete,
               onTap: () async {
-                // String id =
-                //     this.categoryList[index].id; // get id from sqlite database
-                // String result = await dbHelper
-                //     .deleteCategory(id); // delete by id from table
-                // categoryList.removeAt(index); // delete by index from list
-                // updateListView();
+                bool status =
+                    await service.deleteCategory(this.categoryList[index].id);
+                if (status == true) {
+                  print("sukses");
+                  initialize();
+                } else {
+                  print("gagal");
+                }
               },
             ),
           ],

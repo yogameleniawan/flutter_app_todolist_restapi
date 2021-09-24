@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pemrograman_mobile_uts/database/httpservice.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
 
 class FormCategory extends StatefulWidget {
@@ -10,6 +11,7 @@ class FormCategory extends StatefulWidget {
 
 //class controller
 class FormCategoryState extends State<FormCategory> {
+  HTTPService service;
   Category category;
   FormCategoryState(this.category);
   TextEditingController categoryName = TextEditingController();
@@ -22,6 +24,13 @@ class FormCategoryState extends State<FormCategory> {
       _newValue = changeValue;
       status = true;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    service = new HTTPService();
+    super.initState();
   }
 
   @override
@@ -92,17 +101,14 @@ class FormCategoryState extends State<FormCategory> {
                           'Save',
                           textScaleFactor: 1.5,
                         ),
-                        onPressed: () {
-                          if (category == null) {
-// tambah data
-
-                            // category = Category(categoryName.text, _newValue);
+                        onPressed: () async {
+                          bool status = await service.updateCategory(
+                              category.id, categoryName.text, _newValue);
+                          if (status == true) {
+                            print("sukses");
                           } else {
-// ubah data
-                            category.categoryName = categoryName.text;
-                            category.icon = _newValue;
+                            print("gagal");
                           }
-// kembali ke layar sebelumnya dengan membawa objek item
                           Navigator.pop(context, category);
                         },
                       ),

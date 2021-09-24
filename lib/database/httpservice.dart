@@ -67,4 +67,49 @@ class HTTPService {
       return null;
     }
   }
+
+  Future<bool> updateCategory(String id, String name, String icon) async {
+    try {
+      final url = Uri.parse(
+          'https://rest-api-tumbas.herokuapp.com/api/v1/category/' + id);
+      final response = await put(
+        url,
+        body: {'name': name, 'icon': icon},
+      );
+      if (response.statusCode == 200) {
+        print("status 200");
+        return true;
+      } else if (response.statusCode == 201) {
+        return true;
+      } else {
+        print("error status " + response.statusCode.toString());
+        return null;
+      }
+    } catch (e) {
+      print("error catchnya $e");
+      return null;
+    }
+  }
+
+  Future<bool> deleteCategory(String id) async {
+    try {
+      final url = Uri.parse(
+          'https://rest-api-tumbas.herokuapp.com/api/v1/category/' + id);
+      final response = await delete(
+        url,
+      );
+      if (response.statusCode == 200) {
+        print("status 200");
+        return true;
+      } else if (response.statusCode == 201) {
+        return true;
+      } else {
+        print("error status " + response.statusCode.toString());
+        return null;
+      }
+    } catch (e) {
+      print("error catchnya $e");
+      return null;
+    }
+  }
 }
