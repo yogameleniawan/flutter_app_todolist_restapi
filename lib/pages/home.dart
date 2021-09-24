@@ -47,7 +47,6 @@ class HomeState extends State<Home> {
           child: Container(
             height: 200,
             margin: EdgeInsets.only(left: 10, right: 10),
-            // color: Colors.amber,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -219,7 +218,6 @@ class HomeState extends State<Home> {
   }
 
   ListView createListView() {
-    // TextStyle textStyle = Theme.of(context).textTheme.headline5;
     return ListView.builder(
       itemCount: countCategory,
       itemBuilder: (BuildContext context, int index) {
@@ -268,15 +266,8 @@ class HomeState extends State<Home> {
               ),
               subtitle: Text(categoryList[index].icon),
               onTap: () async {
-                var category =
+                var task =
                     await navigateToTask(context, this.categoryList[index]);
-                // updateListView();
-                if (category != null) {
-                  // int result = await dbHelper.updateCategory(category);
-                  // if (result > 0) {
-                  //   // updateListView();
-                  // }
-                }
               },
             ),
           ),

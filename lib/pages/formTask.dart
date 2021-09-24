@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pemrograman_mobile_uts/database/httpservice.dart';
 import 'package:pemrograman_mobile_uts/models/category.dart';
 import 'package:pemrograman_mobile_uts/models/task.dart';
 
@@ -16,6 +17,13 @@ class _FormTaskState extends State<FormTask> {
   String idCategory;
   _FormTaskState(this.idCategory, this.task);
   TextEditingController taskName = TextEditingController();
+  HTTPService service;
+  @override
+  void initState() {
+    // TODO: implement initState
+    service = new HTTPService();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,16 +73,15 @@ class _FormTaskState extends State<FormTask> {
                           'Save',
                           textScaleFactor: 1.5,
                         ),
-                        onPressed: () {
-                          if (task == null) {
-// tambah data
-                            task = Task(taskName.text, idCategory);
+                        onPressed: () async {
+                          bool status = await service.updateTask(
+                              task.id, taskName.text, idCategory);
+                          if (status == true) {
+                            print("sukses");
                           } else {
-// ubah data
-                            task.taskName = taskName.text;
-                            task.idCategory = idCategory;
+                            print("gagal");
                           }
-// kembali ke layar sebelumnya dengan membawa objek item
+
                           Navigator.pop(context, task);
                         },
                       ),

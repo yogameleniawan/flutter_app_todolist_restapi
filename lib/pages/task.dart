@@ -40,7 +40,6 @@ class _TaskListState extends State<TaskList> {
     super.initState();
     service = new HTTPService();
     initialize();
-    // updateListView();
   }
 
   void showBottomSheet() {
@@ -52,7 +51,6 @@ class _TaskListState extends State<TaskList> {
           child: Container(
             height: 200,
             margin: EdgeInsets.only(left: 10, right: 10),
-            // color: Colors.amber,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -70,15 +68,14 @@ class _TaskListState extends State<TaskList> {
                     child: const Text('Add Task'),
                     style: ElevatedButton.styleFrom(primary: Colors.green[300]),
                     onPressed: () async {
-                      if (task == null) {
-                        task = Task(taskName.text, category.id);
+                      bool status =
+                          await service.createTask(taskName.text, category.id);
+                      if (status == true) {
+                        print("sukses");
+                        initialize();
                       } else {
-                        task.taskName = taskName.text;
+                        print("gagal");
                       }
-                      // int result = await dbHelper.insertTask(task);
-                      // if (result > 0) {
-                      //   updateListView();
-                      // }
                       Navigator.pop(context, task);
                       taskName.clear();
                     },
@@ -136,8 +133,7 @@ class _TaskListState extends State<TaskList> {
               Icons.add_box,
               color: Colors.green[200],
             ),
-            onPressed:
-                showBottomSheet, // Call function addItemToList to Add item to list
+            onPressed: showBottomSheet,
           ),
         ],
       ),
@@ -193,12 +189,7 @@ class _TaskListState extends State<TaskList> {
                   ),
                 ),
                 Text(
-                  DateFormat('EEEEEE, MMMM d').format(
-                      selectedDate), // get date format with EEEEEE (Full character of Day -> Sunday, Monday, Tuesday)
-                  // EEE (Just 3 character of day name -> Sun, Mon, Tue)
-                  // MMMM (Full character of Month -> January, February, March)
-                  // MM (Just 3 character of month name -> Jan, Feb, Mar)
-                  // d show the date (1 - 31)
+                  DateFormat('EEEEEE, MMMM d').format(selectedDate),
                   style: TextStyle(color: Colors.black54),
                 ),
               ],
@@ -278,13 +269,7 @@ class _TaskListState extends State<TaskList> {
                 onTap: () async {
                   var task = await navigateToForm(
                       context, this.listTask[index], category.id);
-                  //TODO 4 Panggil Fungsi untuk Edit data
-                  if (task != null) {
-                    // int result = await dbHelper.updateTask(task);
-                    // if (result > 0) {
-                    //   updateListView();
-                    // }
-                  }
+                  initialize();
                 },
               ),
             ),
@@ -292,21 +277,6 @@ class _TaskListState extends State<TaskList> {
         );
       },
     );
-  }
-
-//update List item
-  void updateListView() {
-//     final Future<Database> dbFuture = dbHelper.initDb();
-//     dbFuture.then((database) {
-// //TODO 1 Select data dari DB
-//       Future<List<Task>> taskListFuture = dbHelper.getTaskList(idCategory);
-//       taskListFuture.then((listTask) {
-//         setState(() {
-//           this.listTask = listTask;
-//           this.count = listTask.length;
-//         });
-//       });
-//     });
   }
 
   void _showcontent(int index, String idTask) {
@@ -327,11 +297,14 @@ class _TaskListState extends State<TaskList> {
             new FlatButton(
               child: new Text('YES'),
               onPressed: () async {
+                bool status = await service.deleteTask(this.listTask[index].id);
+                if (status == true) {
+                  print("sukses");
+                  initialize();
+                } else {
+                  print("gagal");
+                }
                 Navigator.of(context).pop();
-                // int result = await dbHelper
-                //     .deleteTask(idTask); // delete by id from table
-                // listTask.removeAt(index); // delete by index from list
-                // updateListView();
               },
             ),
             new FlatButton(

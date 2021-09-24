@@ -26,6 +26,77 @@ class HTTPService {
     }
   }
 
+  Future createTask(String description, String category_id) async {
+    try {
+      http.Response hasil = await http.post(
+          Uri.parse("https://rest-api-tumbas.herokuapp.com/api/v1/task"),
+          body: {
+            'description': description,
+            'category_id': category_id,
+          },
+          headers: {
+            "Accept": "application/json",
+          });
+      if (hasil.statusCode == 200) {
+        print("status 200");
+        return true;
+      } else if (hasil.statusCode == 201) {
+        return true;
+      } else {
+        print("error status " + hasil.statusCode.toString());
+        return null;
+      }
+    } catch (e) {
+      print("error catchnya $e");
+      return null;
+    }
+  }
+
+  Future<bool> updateTask(String id, String name, String category_id) async {
+    try {
+      final url =
+          Uri.parse('https://rest-api-tumbas.herokuapp.com/api/v1/task/' + id);
+      final response = await put(
+        url,
+        body: {'description': name, 'category_id': category_id},
+      );
+      if (response.statusCode == 200) {
+        print("status 200");
+        return true;
+      } else if (response.statusCode == 201) {
+        return true;
+      } else {
+        print("error status " + response.statusCode.toString());
+        return null;
+      }
+    } catch (e) {
+      print("error catchnya $e");
+      return null;
+    }
+  }
+
+  Future<bool> deleteTask(String id) async {
+    try {
+      final url =
+          Uri.parse('https://rest-api-tumbas.herokuapp.com/api/v1/task/' + id);
+      final response = await delete(
+        url,
+      );
+      if (response.statusCode == 200) {
+        print("status 200");
+        return true;
+      } else if (response.statusCode == 201) {
+        return true;
+      } else {
+        print("error status " + response.statusCode.toString());
+        return null;
+      }
+    } catch (e) {
+      print("error catchnya $e");
+      return null;
+    }
+  }
+
   Future<List> getCategory() async {
     final String uri = "https://rest-api-tumbas.herokuapp.com/api/v1/category";
 
